@@ -18,9 +18,9 @@ func main() {
 func place(queens [][2]int) {
 	row := len(queens)
 	if row < n {
-		chessboard := render(queens)
+		nextRank := render(queens)
 		for col := 0; col < n; col++ {
-			if chessboard[row][col] == 0 {
+			if nextRank[col] == 0 {
 				queens = append(queens, [2]int{row, col})
 				place(queens)
 				queens = queens[:row]
@@ -32,23 +32,19 @@ func place(queens [][2]int) {
 	}
 }
 
-func render(queens [][2]int) [n][n]int {
-	var chessboard [n][n]int
+func render(queens [][2]int) [n]int {
+	var rank [n]int
+	row := len(queens)
 	for _, queen := range queens {
-		for row := 0; row < n; row++ {
-			for col := 0; col < n; col++ {
-				if row == queen[0] && col == queen[1] {
-					chessboard[row][col] = 1
-				} else if row == queen[0] ||
-					col == queen[1] ||
-					row-queen[0] == col-queen[1] ||
-					row+col == queen[0]+queen[1] {
-					chessboard[row][col] = -1
-				}
+		for col := 0; col < n; col++ {
+			if col == queen[1] ||
+				row+col == queen[0]+queen[1] ||
+				row-queen[0] == col-queen[1] {
+				rank[col] = -1
 			}
 		}
 	}
-	return chessboard
+	return rank
 }
 
 func visualize(index int, solution [][2]int) {
